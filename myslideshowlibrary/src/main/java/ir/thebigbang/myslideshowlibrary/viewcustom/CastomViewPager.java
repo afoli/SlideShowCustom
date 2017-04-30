@@ -5,10 +5,6 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
-/**
- * Created by DITOP on 4/24/2017.
- */
-
 public class CastomViewPager extends ViewPager {
 
     private boolean swipeable = false;
@@ -29,6 +25,6 @@ public class CastomViewPager extends ViewPager {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent arg0) {
-        return (this.swipeable) ? super.onInterceptTouchEvent(arg0) : false;
+        return (this.swipeable) && super.onInterceptTouchEvent(arg0);
     }
 }

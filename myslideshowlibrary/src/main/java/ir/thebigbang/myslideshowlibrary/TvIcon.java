@@ -5,10 +5,6 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-/**
- * Created by DITOP on 1/8/2017.
- */
-
 public class TvIcon extends TextView {
 
     public TvIcon(Context context) {

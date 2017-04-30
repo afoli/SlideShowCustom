@@ -1,9 +1,5 @@
 package ir.thebigbang.myslideshowlibrary.viewcustom;
 
-/**
- * Created by DITOP on 4/22/2017.
- */
-
 public class Consts {
 
     public class PageTransforms {

@@ -3,10 +3,6 @@ package ir.thebigbang.myslideshowlibrary.viewcustom;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-/**
- * Created by DITOP on 4/22/2017.
- */
-
 public class ZoomOutPageTransformer implements ViewPager.PageTransformer {
     private static final float MIN_SCALE = 0.85f;
     private static final float MIN_ALPHA = 0.5f;

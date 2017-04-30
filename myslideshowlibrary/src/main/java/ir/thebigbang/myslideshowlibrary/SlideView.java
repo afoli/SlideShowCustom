@@ -27,10 +27,6 @@ import ir.thebigbang.myslideshowlibrary.viewcustom.RotationYPageTransform;
 import ir.thebigbang.myslideshowlibrary.viewcustom.ScaleXYPageTransform;
 import ir.thebigbang.myslideshowlibrary.viewcustom.ZoomOutPageTransformer;
 
-/**
- * Created by DITOP on 4/30/2017.
- */
-
 public class SlideView extends LinearLayout {
 
     private static final String TAG = "Slide";

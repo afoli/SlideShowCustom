@@ -3,10 +3,6 @@ package ir.thebigbang.myslideshowlibrary.viewcustom;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-/**
- * Created by DITOP on 4/22/2017.
- */
-
 public class DepthPageTransformer implements ViewPager.PageTransformer {
     private static final float MIN_SCALE = 0.75f;
 

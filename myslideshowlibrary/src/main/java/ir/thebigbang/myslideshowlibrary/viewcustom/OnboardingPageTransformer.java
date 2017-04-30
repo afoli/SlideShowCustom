@@ -3,10 +3,6 @@ package ir.thebigbang.myslideshowlibrary.viewcustom;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-/**
- * Created by DITOP on 4/26/2017.
- */
-
 public class OnboardingPageTransformer implements ViewPager.PageTransformer {
 
     @Override
