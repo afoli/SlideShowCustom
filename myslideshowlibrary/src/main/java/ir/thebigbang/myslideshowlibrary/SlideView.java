@@ -69,12 +69,12 @@ public class SlideView extends LinearLayout {
         initialize(context);
     }
 
-    public SlideView(Context context, @Nullable AttributeSet attrs) {
+    public SlideView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initialize(context);
     }
 
-    public SlideView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public SlideView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initialize(context);
     }
