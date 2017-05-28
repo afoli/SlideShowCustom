@@ -2,33 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: "com.jfrog.bintray"
 
-version = "0.0.2"
-
-//ext {
-//    bintrayRepo = 'maven'
-//    bintrayName = 'afsaneh'
-//
-//    publishedGroupId = 'ir.thebigbang'
-//    libraryName = 'myslideshowlibrary'
-//    artifact = 'ir.thebigbang'
-//
-//    libraryDescription = 'A wrapper for Facebook Native Like Button (LikeView) on Android'
-//
-//    siteUrl = 'https://github.com/afoli/SlideShowCustom'
-//    gitUrl = 'https://github.com/afoli/SlideShowCustom.git'
-//
-//    libraryVersion = '0.0.1'
-//
-//    developerId = 'afsaneh'
-//    developerName = 'Afsaneh Fallahzadeh'
-//    developerEmail = 'afsaneh.fallahzadeh@gmail.com'
-//
-//    licenseName = 'The Apache Software License, Version 2.0'
-//    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//    allLicenses = ["Apache-2.0"]
-//}
-
-
+version = "0.0.3"
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -58,7 +32,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.2.0'
     testCompile 'junit:junit:4.12'
 
-    compile 'com.github.navasmdc:MaterialDesign:1.5@aar'
+//    compile 'com.github.navasmdc:MaterialDesign:1.5@aar'
 }
 
 def siteUrl = 'https://github.com/afoli/SlideShowCustom'      // Homepage URL of the library
