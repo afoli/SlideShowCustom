@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="gravity_indi">
+        <attr name="gravity_indicator">
+            <enum name="right" value="0" />
+            <enum name="center" value="1" />
+            <enum name="left" value="2" />
+            <enum name="end" value="3" />
+            <enum name="start" value="4" />
+        </attr>
+
+        <attr name="indicator_strok" format="boolean" />
+        <attr name="indicator_border_color" format="color" />
+    </declare-styleable>
+</resources>

@@ -2,12 +2,11 @@ package ir.thebigbang.myslideshowlibrary;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,8 +28,6 @@ import ir.thebigbang.myslideshowlibrary.viewcustom.ZoomOutPageTransformer;
 
 public class SlideView extends LinearLayout {
 
-    private static final String TAG = "Slide";
-
     private int position = 0, totalImage;
     private ViewPager viewPage;
     private CustomSlideAdapter adapter;
@@ -45,8 +42,16 @@ public class SlideView extends LinearLayout {
     private int paddingIndicator;
     private boolean flag = true;
     private int pageSwitcherTime = 2;
+    private int gravityIndicator = Gravity.CENTER;
 
     int pageTransformation = 0;
+
+    private AttributeSet attrs;
+    private boolean indicatorWithStrock = false;
+    private int indicatorStrockColor = Color.WHITE;
+
+    private int colorIndicatorImage;
+    private int colorIndicatorSelectorImage;
 
     int[] mResourcesDef = {
             R.drawable.f_five,
@@ -63,24 +68,53 @@ public class SlideView extends LinearLayout {
     private Timer timer;
     private int page = -1;
 
+    private int dotsCount;
 
     public SlideView(Context context) {
         super(context);
+
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.gravity_indi);
+        gravityIndicator = a.getInteger(R.styleable.gravity_indi_gravity_indicator, 1);
+        indicatorWithStrock = a.getBoolean(R.styleable.gravity_indi_indicator_strok, false);
+        indicatorStrockColor = a.getColor(R.styleable.gravity_indi_indicator_border_color, 0);
+        a.recycle();
+
         initialize(context);
     }
 
     public SlideView(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.gravity_indi);
+        gravityIndicator = a.getInteger(R.styleable.gravity_indi_gravity_indicator, 1);
+        indicatorWithStrock = a.getBoolean(R.styleable.gravity_indi_indicator_strok, false);
+        indicatorStrockColor = a.getColor(R.styleable.gravity_indi_indicator_border_color, 0);
+        a.recycle();
+
         initialize(context);
     }
 
     public SlideView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.gravity_indi);
+        gravityIndicator = a.getInteger(R.styleable.gravity_indi_gravity_indicator, 1);
+        indicatorWithStrock = a.getBoolean(R.styleable.gravity_indi_indicator_strok, false);
+        indicatorStrockColor = a.getColor(R.styleable.gravity_indi_indicator_border_color, 0);
+        a.recycle();
+
         initialize(context);
     }
 
     public SlideView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.gravity_indi);
+        gravityIndicator = a.getInteger(R.styleable.gravity_indi_gravity_indicator, 1);
+        indicatorWithStrock = a.getBoolean(R.styleable.gravity_indi_indicator_strok, false);
+        indicatorStrockColor = a.getColor(R.styleable.gravity_indi_indicator_border_color, 0);
+        a.recycle();
+
         initialize(context);
     }
 
@@ -90,8 +124,6 @@ public class SlideView extends LinearLayout {
         viewPage = (ViewPager) findViewById(R.id.slide_show);
         android.support.v4.app.FragmentManager fragmentManager
                 = ((AppCompatActivity) getContext()).getSupportFragmentManager();
-
-        final int dotsCount;
 
         if (mResources == null) {
             adapter = new CustomSlideAdapter(fragmentManager, mResourcesDef, mResourcesDef.length);
@@ -103,69 +135,12 @@ public class SlideView extends LinearLayout {
         }
 
         viewPage.setAdapter(adapter);
-//        viewPage.setSwipeable(false);
 
-        final TvIcon[] dots = new TvIcon[dotsCount];
-
-        LinearLayout dotsLayout = (LinearLayout) findViewById(R.id.layout_indicator);
-
-        for (int i = 0; i < dotsCount; i++) {
-            dots[i] = new TvIcon(getActivity());
-            dots[i].setTextSize(getIndicatorNormalTextSize());
-            dots[i].setText(R.string.iconCircleFill);
-
-            LayoutParams lp = new LayoutParams(
-                    LayoutParams.WRAP_CONTENT,
-                    LayoutParams.WRAP_CONTENT);
-
-            lp.setMargins(getPaddingIndicator(), getPaddingIndicator(),
-                    getPaddingIndicator(), getPaddingIndicator());
-
-            lp.gravity = Gravity.CENTER;
-
-            dots[i].setLayoutParams(lp);
-            dotsLayout.addView(dots[i]);
+        if (!indicatorWithStrock) {
+            setIndicatorItemsText();
+        } else {
+            setIndicatorItemsImage();
         }
-
-        viewPage.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                if (flag) {
-                    dots[0].setText(R.string.iconCircleFill);
-                    dots[0].setTextSize(getIndicatorSelectedTextSize());
-                    dots[0].setTextColor(Color.parseColor("#" + getColorIndicatorSelector()));
-                    for (int l = 1; l < dotsCount; l++) {
-                        dots[l].setText(R.string.iconCircleFill);
-                        dots[l].setTextSize(getIndicatorNormalTextSize());
-                        dots[l].setTextColor(Color.parseColor("#" + getColorIndicator()));
-                    }
-                    flag = false;
-                }
-            }
-
-            @Override
-            public void onPageSelected(int pos) {
-
-                int realPosition = pos % dotsCount;
-
-                for (int l = 0; l < dotsCount; l++) {
-                    dots[l].setText(R.string.iconCircleFill);
-                    dots[l].setTextSize(getIndicatorNormalTextSize());
-                    dots[l].setTextColor(Color.parseColor("#" + getColorIndicator()));
-                }
-                dots[realPosition].setText(R.string.iconCircleFill);
-                dots[realPosition].setTextSize(getIndicatorSelectedTextSize());
-                dots[realPosition].setTextColor(Color.parseColor("#" + getColorIndicatorSelector()));
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
 
         try {
             Field mScroller;
@@ -184,19 +159,15 @@ public class SlideView extends LinearLayout {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                Log.d(TAG, "getCurrentItem:  " + viewPage.getCurrentItem());
+                switch (event.getAction()) {
 
-//                switch (event.getAction()) {
-//
-//                    case MotionEvent.EDGE_RIGHT:
-//                        viewPage.setCurrentItem(page++);
-//                        Log.d(TAG, "onTouch: EDGE_RIGHT " + page);
-//                        break;
-//                    case MotionEvent.EDGE_LEFT:
-//                        viewPage.setCurrentItem(page--);
-//                        Log.d(TAG, "onTouch: EDGE_LEFT " + page);
-//                        break;
-//                }
+                    case MotionEvent.EDGE_RIGHT:
+                        viewPage.setCurrentItem(page++);
+                        break;
+                    case MotionEvent.EDGE_LEFT:
+                        viewPage.setCurrentItem(page--);
+                        break;
+                }
 
                 viewPage.setCurrentItem(page);
 
@@ -221,7 +192,6 @@ public class SlideView extends LinearLayout {
                     int numPages = viewPage.getAdapter().getCount();
                     page = (page + 1) % numPages;
                     viewPage.setCurrentItem(page);
-                    Log.d(TAG, "run: page: " + page);
                 }
             });
         }
@@ -337,7 +307,31 @@ public class SlideView extends LinearLayout {
         setPageTransformationCustom();
     }
 
-    public void setPageTransformationCustom() {
+    public boolean isIndicatorWithStrock() {
+        return indicatorWithStrock;
+    }
+
+    public void setIndicatorWithStrock(boolean indicatorWithStrock) {
+        this.indicatorWithStrock = indicatorWithStrock;
+    }
+
+    public int getColorIndicatorImage() {
+        return colorIndicatorImage;
+    }
+
+    public void setColorIndicatorImage(int colorIndicatorImage) {
+        this.colorIndicatorImage = colorIndicatorImage;
+    }
+
+    public int getColorIndicatorSelectorImage() {
+        return colorIndicatorSelectorImage;
+    }
+
+    public void setColorIndicatorSelectorImage(int colorIndicatorSelectorImage) {
+        this.colorIndicatorSelectorImage = colorIndicatorSelectorImage;
+    }
+
+    private void setPageTransformationCustom() {
 
         switch (getPageTransformation()) {
 
@@ -369,6 +363,170 @@ public class SlideView extends LinearLayout {
                 viewPage.setPageTransformer(true, new OnboardingPageTransformer());
                 break;
         }
+    }
+
+    private void setIndicatorItemsText() {
+
+        final TvIcon[] dots = new TvIcon[dotsCount];
+
+        LinearLayout dotsLayout = (LinearLayout) findViewById(R.id.layout_indicator);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 50);
+        params.weight = 1.0f;
+
+        switch (gravityIndicator) {
+            case 0:
+                params.gravity = Gravity.RIGHT;
+                break;
+            case 1:
+                params.gravity = Gravity.CENTER;
+                break;
+            case 2:
+                params.gravity = Gravity.LEFT;
+                break;
+            case 3:
+                params.gravity = Gravity.END;
+                break;
+            case 4:
+                params.gravity = Gravity.START;
+                break;
+            default:
+                break;
+        }
+        dotsLayout.setLayoutParams(params);
+
+        for (int i = 0; i < dotsCount; i++) {
+            dots[i] = new TvIcon(getActivity());
+            dots[i].setTextSize(getIndicatorNormalTextSize());
+            dots[i].setText(R.string.iconCircleFill);
+
+            LayoutParams lp = new LayoutParams(
+                    LayoutParams.WRAP_CONTENT,
+                    LayoutParams.WRAP_CONTENT);
+
+            lp.setMargins(getPaddingIndicator(), getPaddingIndicator(),
+                    getPaddingIndicator(), getPaddingIndicator());
+
+            lp.gravity = Gravity.CENTER;
+
+            dots[i].setLayoutParams(lp);
+            dotsLayout.addView(dots[i]);
+        }
+
+        viewPage.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                if (flag) {
+                    dots[0].setText(R.string.iconCircleFill);
+                    dots[0].setTextSize(getIndicatorSelectedTextSize());
+                    dots[0].setTextColor(Color.parseColor("#" + getColorIndicatorSelector()));
+                    for (int l = 1; l < dotsCount; l++) {
+                        dots[l].setText(R.string.iconCircleFill);
+                        dots[l].setTextSize(getIndicatorNormalTextSize());
+                        dots[l].setTextColor(Color.parseColor("#" + getColorIndicator()));
+                    }
+                    flag = false;
+                }
+            }
+
+            @Override
+            public void onPageSelected(int pos) {
+
+                int realPosition = pos % dotsCount;
+
+                for (int l = 0; l < dotsCount; l++) {
+                    dots[l].setText(R.string.iconCircleFill);
+                    dots[l].setTextSize(getIndicatorNormalTextSize());
+                    dots[l].setTextColor(Color.parseColor("#" + getColorIndicator()));
+                }
+                dots[realPosition].setText(R.string.iconCircleFill);
+                dots[realPosition].setTextSize(getIndicatorSelectedTextSize());
+                dots[realPosition].setTextColor(Color.parseColor("#" + getColorIndicatorSelector()));
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
+    private void setIndicatorItemsImage() {
+
+        final CircleImageView[] dots = new CircleImageView[dotsCount];
+
+        LinearLayout dotsLayout = (LinearLayout) findViewById(R.id.layout_indicator);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, 50);
+        params.weight = 1.0f;
+
+        switch (gravityIndicator) {
+            case 0:
+                params.gravity = Gravity.RIGHT;
+                break;
+            case 1:
+                params.gravity = Gravity.CENTER;
+                break;
+            case 2:
+                params.gravity = Gravity.LEFT;
+                break;
+            case 3:
+                params.gravity = Gravity.END;
+                break;
+            case 4:
+                params.gravity = Gravity.START;
+                break;
+            default:
+                break;
+        }
+        dotsLayout.setLayoutParams(params);
+
+        for (int i = 0; i < dotsCount; i++) {
+            dots[i] = new CircleImageView(getContext());
+
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(getWidthIndicator(),
+                    getHeightIndicator());
+
+            lp.setMargins(getPaddingIndicator(), getPaddingIndicator(),
+                    getPaddingIndicator(), getPaddingIndicator());
+            dots[i].setLayoutParams(lp);
+            dotsLayout.addView(dots[i]);
+        }
+
+        viewPage.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                if (flag) {
+                    dots[0].setImageResource(getColorIndicatorSelectorImage());
+                    dots[0].setBorderColor(indicatorStrockColor);
+                    dots[0].setBorderWidth(2);
+                    for (int l = 1; l < dotsCount; l++) {
+                        dots[l].setImageResource(getColorIndicatorImage());
+                    }
+                    flag = false;
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+                int realPosition = position % dotsCount;
+
+                for (int l = 0; l < dotsCount; l++) {
+                    dots[l].setImageResource(getColorIndicatorImage());
+                }
+                dots[realPosition].setImageResource(getColorIndicatorSelectorImage());
+                dots[realPosition].setBorderColor(indicatorStrockColor);
+                dots[realPosition].setBorderWidth(2);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
 }

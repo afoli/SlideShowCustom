@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="right" type="integer">0</item>
+    <item name="center" type="integer">1</item>
+    <item name="left" type="integer">2</item>
+    <item name="end" type="integer">3</item>
+    <item name="start" type="integer">4</item>
+</resources>
