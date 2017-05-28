@@ -49,6 +49,7 @@ public class SlideView extends LinearLayout {
     private AttributeSet attrs;
     private boolean indicatorWithStrock = false;
     private int indicatorStrockColor = Color.WHITE;
+    private int indicatorBorderWidth = 4;
 
     private int colorIndicatorImage;
     private int colorIndicatorSelectorImage;
@@ -331,6 +332,14 @@ public class SlideView extends LinearLayout {
         this.colorIndicatorSelectorImage = colorIndicatorSelectorImage;
     }
 
+    public int getIndicatorBorderWidth() {
+        return indicatorBorderWidth;
+    }
+
+    public void setIndicatorBorderWidth(int indicatorBorderWidth) {
+        this.indicatorBorderWidth = indicatorBorderWidth;
+    }
+
     private void setPageTransformationCustom() {
 
         switch (getPageTransformation()) {
@@ -501,7 +510,7 @@ public class SlideView extends LinearLayout {
                 if (flag) {
                     dots[0].setImageResource(getColorIndicatorSelectorImage());
                     dots[0].setBorderColor(indicatorStrockColor);
-                    dots[0].setBorderWidth(2);
+                    dots[0].setBorderWidth(getIndicatorBorderWidth());
                     for (int l = 1; l < dotsCount; l++) {
                         dots[l].setImageResource(getColorIndicatorImage());
                     }
@@ -519,7 +528,7 @@ public class SlideView extends LinearLayout {
                 }
                 dots[realPosition].setImageResource(getColorIndicatorSelectorImage());
                 dots[realPosition].setBorderColor(indicatorStrockColor);
-                dots[realPosition].setBorderWidth(2);
+                dots[realPosition].setBorderWidth(getIndicatorBorderWidth());
             }
 
             @Override
