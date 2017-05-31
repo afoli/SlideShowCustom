@@ -309,7 +309,9 @@ public class SlideView extends LinearLayout {
 
     public void setPageSwitcherTime(int pageSwitcherTime) {
         this.pageSwitcherTime = pageSwitcherTime;
-        pageSwitcher(getPageSwitcherTime());
+        if (bitmapImages.length > 1 || mResources.length > 1) {
+            pageSwitcher(getPageSwitcherTime());
+        }
     }
 
     public int getPageTransformation() {
