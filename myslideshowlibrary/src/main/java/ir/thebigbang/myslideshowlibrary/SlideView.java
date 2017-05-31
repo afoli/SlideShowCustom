@@ -204,8 +204,10 @@ public class SlideView extends LinearLayout {
                         numPages = mResources.length;
                     }
 
-                    page = (page + 1) % 200;
-                    viewPage.setCurrentItem(page);
+                    if (bitmapImages.length > 1 || mResources.length > 1) {
+                        page = (page + 1) % 200;
+                        viewPage.setCurrentItem(page);
+                    }
                 }
             });
         }
@@ -309,9 +311,7 @@ public class SlideView extends LinearLayout {
 
     public void setPageSwitcherTime(int pageSwitcherTime) {
         this.pageSwitcherTime = pageSwitcherTime;
-        if (bitmapImages.length > 1 || mResources.length > 1) {
-            pageSwitcher(getPageSwitcherTime());
-        }
+        pageSwitcher(getPageSwitcherTime());
     }
 
     public int getPageTransformation() {
