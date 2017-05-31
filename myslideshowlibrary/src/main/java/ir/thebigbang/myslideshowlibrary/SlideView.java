@@ -204,10 +204,8 @@ public class SlideView extends LinearLayout {
                         numPages = mResources.length;
                     }
 
-                    if (bitmapImages.length > 1 || mResources.length > 1) {
-                        page = (page + 1) % 200;
-                        viewPage.setCurrentItem(page);
-                    }
+                    page = (page + 1) % 200;
+                    viewPage.setCurrentItem(page);
                 }
             });
         }
