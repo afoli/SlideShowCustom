@@ -6,4 +6,9 @@
     android:orientation="vertical"
     tools:context="ir.thebigbang.slideshowcustom.MainActivity">
 
+    <ir.thebigbang.myslideshowlibrary.SlideView
+        android:id="@+id/slid_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </LinearLayout>
