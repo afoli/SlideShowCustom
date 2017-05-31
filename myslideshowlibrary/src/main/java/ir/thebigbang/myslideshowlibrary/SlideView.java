@@ -3,6 +3,8 @@ package ir.thebigbang.myslideshowlibrary;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -54,6 +56,8 @@ public class SlideView extends LinearLayout {
     private int colorIndicatorImage;
     private int colorIndicatorSelectorImage;
 
+    private android.support.v4.app.FragmentManager fragmentManager;
+
     int[] mResourcesDef = {
             R.drawable.f_five,
             R.drawable.f_three,
@@ -63,6 +67,8 @@ public class SlideView extends LinearLayout {
             R.drawable.f_six,
             R.drawable.f_two
     };
+
+    Bitmap[] bitmapImages;
 
     private Activity activity;
 
@@ -122,16 +128,19 @@ public class SlideView extends LinearLayout {
     private void initialize(Context context) {
         inflate(context, R.layout.view_slider, this);
 
+        bitmapImages = new Bitmap[2];
+        bitmapImages[0] = BitmapFactory.decodeResource(getResources(), R.drawable.f_five);
+        bitmapImages[1] = BitmapFactory.decodeResource(getResources(), R.drawable.f_four);
+
         viewPage = (ViewPager) findViewById(R.id.slide_show);
-        android.support.v4.app.FragmentManager fragmentManager
-                = ((AppCompatActivity) getContext()).getSupportFragmentManager();
+        fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
 
         if (mResources == null) {
-            adapter = new CustomSlideAdapter(fragmentManager, mResourcesDef, mResourcesDef.length);
-            dotsCount = mResourcesDef.length;
+            adapter = new CustomSlideAdapter(fragmentManager, bitmapImages, bitmapImages.length, 1);
+            dotsCount = bitmapImages.length;
             return;
         } else {
-            adapter = new CustomSlideAdapter(fragmentManager, mResources, mResources.length);
+            adapter = new CustomSlideAdapter(fragmentManager, mResources, mResources.length, 0);
             dotsCount = mResources.length;
         }
 
@@ -175,7 +184,6 @@ public class SlideView extends LinearLayout {
                 return false;
             }
         });
-
     }
 
     public void pageSwitcher(int seconds) {
@@ -189,9 +197,14 @@ public class SlideView extends LinearLayout {
         public void run() {
             ((Activity) getContext()).runOnUiThread(new Runnable() {
                 public void run() {
-//                    viewPage.setCurrentItem((page++) % mResources.length);
-                    int numPages = viewPage.getAdapter().getCount();
-                    page = (page + 1) % numPages;
+                    int numPages;
+                    if (mResources == null) {
+                        numPages = bitmapImages.length;
+                    } else {
+                        numPages = mResources.length;
+                    }
+
+                    page = (page + 1) % 200;
                     viewPage.setCurrentItem(page);
                 }
             });
@@ -338,6 +351,15 @@ public class SlideView extends LinearLayout {
 
     public void setIndicatorBorderWidth(int indicatorBorderWidth) {
         this.indicatorBorderWidth = indicatorBorderWidth;
+    }
+
+    public Bitmap[] getBitmapImages() {
+        return bitmapImages;
+    }
+
+    public void setBitmapImages(Bitmap[] bitmapImages) {
+        this.bitmapImages = bitmapImages;
+        setBitmapAdapter();
     }
 
     private void setPageTransformationCustom() {
@@ -538,4 +560,16 @@ public class SlideView extends LinearLayout {
         });
     }
 
+    private void setBitmapAdapter() {
+
+        adapter = new CustomSlideAdapter(fragmentManager, bitmapImages, bitmapImages.length, 1);
+        dotsCount = getBitmapImages().length;
+        viewPage.setAdapter(adapter);
+
+        if (!indicatorWithStrock) {
+            setIndicatorItemsText();
+        } else {
+            setIndicatorItemsImage();
+        }
+    }
 }

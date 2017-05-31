@@ -1,5 +1,6 @@
 package ir.thebigbang.myslideshowlibrary;
 
+import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -11,20 +12,37 @@ public class CustomSlideAdapter extends FragmentStatePagerAdapter {
     private int[] mResources;
     private int count;
     private FragmentManager fm;
+    private Bitmap[] bitmapImages;
+    private int type;
 
-    public CustomSlideAdapter(FragmentManager fm, int[] mResources, int count) {
+    public CustomSlideAdapter(FragmentManager fm, int[] mResources, int count, int type) {
         super(fm);
         this.mResources = mResources;
         this.count = count;
         this.fm = fm;
+        this.type = type;
+    }
+
+    public CustomSlideAdapter(FragmentManager fm, Bitmap[] bitmapImages, int count, int type) {
+        super(fm);
+        this.count = count;
+        this.bitmapImages = bitmapImages;
+        this.type = type;
     }
 
     @Override
     public Fragment getItem(int position) {
         int realPosition = ((position) % count);
+        SlideItem f = SlideItem.newInstance(type);
 
-        SlideItem f = SlideItem.newInstance();
-        f.setImageList(mResources[realPosition]);
+        switch (type) {
+            case 0:
+                f.setImageList(mResources[realPosition]);
+                break;
+            case 1:
+                f.setImageBitmapList(bitmapImages[realPosition]);
+                break;
+        }
         return f;
     }
 
@@ -42,4 +60,5 @@ public class CustomSlideAdapter extends FragmentStatePagerAdapter {
     public int getItemPosition(Object object) {
         return PagerAdapter.POSITION_NONE;
     }
+
 }

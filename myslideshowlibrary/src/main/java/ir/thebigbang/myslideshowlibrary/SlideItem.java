@@ -4,10 +4,10 @@ package ir.thebigbang.myslideshowlibrary;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +16,11 @@ import android.widget.ImageView;
 
 public class SlideItem extends Fragment {
 
+    private static final String ARG_PARAM1 = "param1";
+    private int mParam1;
+
     private int itemData;
+    private Bitmap itemDataBitmap;
     private Bitmap myBitmap;
     public ProgressDialog pd;
     private ImageView ivImage;
@@ -27,14 +31,20 @@ public class SlideItem extends Fragment {
         // Required empty public constructor
     }
 
-    public static SlideItem newInstance() {
-        SlideItem f = new SlideItem();
-        return f;
+    public static SlideItem newInstance(int param1) {
+        SlideItem fragment = new SlideItem();
+        Bundle args = new Bundle();
+        args.putInt(ARG_PARAM1, param1);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getInt(ARG_PARAM1);
+        }
     }
 
     @Override
@@ -44,9 +54,6 @@ public class SlideItem extends Fragment {
         View root = inflater.inflate(R.layout.fragment_slide_item, container, false);
         ivImage = (ImageView) root.findViewById(R.id.ivImageView);
         setImageInViewPager();
-
-//            runSimpleAnimation(getContext(), ivImage,);
-
         return root;
     }
 
@@ -54,34 +61,18 @@ public class SlideItem extends Fragment {
         this.itemData = integer;
     }
 
-    public void setImageInViewPager() {
-        try {
+    public void setImageBitmapList(Bitmap bitmap) {
+        this.itemDataBitmap = bitmap;
+    }
 
-            //if image size is too large. Need to scale as below code.
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            myBitmap = BitmapFactory.decodeResource(getResources(), itemData, options);
-            if (options.outWidth > 3000 || options.outHeight > 2000) {
-                options.inSampleSize = 4;
-            } else if (options.outWidth > 2000 || options.outHeight > 1500) {
-                options.inSampleSize = 3;
-            } else if (options.outWidth > 1000 || options.outHeight > 1000) {
-                options.inSampleSize = 2;
-            }
-            options.inJustDecodeBounds = false;
-            myBitmap = BitmapFactory.decodeResource(getResources(), itemData, options);
-            if (myBitmap != null) {
-                try {
-                    if (ivImage != null) {
-                        ivImage.setImageBitmap(myBitmap);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (OutOfMemoryError e) {
-            e.printStackTrace();
-            System.gc();
+    public void setImageInViewPager() {
+        switch (mParam1) {
+            case 0:
+                ivImage.setImageResource(itemData);
+                break;
+            case 1:
+                ivImage.setImageBitmap(itemDataBitmap);
+                break;
         }
     }
 
