@@ -7,7 +7,7 @@
         android:id="@+id/slide_show"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/transparent" />
+        android:background="@drawable/default_imges" />
 
     <LinearLayout
         android:layout_width="match_parent"
