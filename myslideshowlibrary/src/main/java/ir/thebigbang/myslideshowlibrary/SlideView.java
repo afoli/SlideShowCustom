@@ -579,10 +579,8 @@ public class SlideView extends LinearLayout {
 
         if (bitmapImages.length != 0) {
         } else {
-            bitmapImages = new Bitmap[2];
+            bitmapImages = new Bitmap[1];
             bitmapImages[0] = BitmapFactory.decodeResource
-                    (getResources(), R.drawable.default_imges);
-            bitmapImages[1] = BitmapFactory.decodeResource
                     (getResources(), R.drawable.default_imges);
         }
 
