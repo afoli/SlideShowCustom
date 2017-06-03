@@ -577,6 +577,15 @@ public class SlideView extends LinearLayout {
 
     private void setBitmapAdapter() {
 
+        if (bitmapImages.length != 0) {
+        } else {
+            bitmapImages = new Bitmap[2];
+            bitmapImages[0] = BitmapFactory.decodeResource
+                    (getResources(), R.drawable.default_imges);
+            bitmapImages[1] = BitmapFactory.decodeResource
+                    (getResources(), R.drawable.default_imges);
+        }
+
         adapter = new CustomSlideAdapter(fragmentManager, bitmapImages, bitmapImages.length, 1);
         dotsCount = getBitmapImages().length;
         viewPage.setAdapter(adapter);
