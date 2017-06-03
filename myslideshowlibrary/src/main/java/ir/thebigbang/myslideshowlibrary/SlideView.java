@@ -136,12 +136,27 @@ public class SlideView extends LinearLayout {
         fragmentManager = ((AppCompatActivity) getContext()).getSupportFragmentManager();
 
         if (mResources == null) {
-            adapter = new CustomSlideAdapter(fragmentManager, bitmapImages, bitmapImages.length, 1);
-            dotsCount = bitmapImages.length;
+            if (bitmapImages.length != 0) {
+                adapter = new CustomSlideAdapter(fragmentManager, bitmapImages, bitmapImages.length, 1);
+                dotsCount = bitmapImages.length;
+            } else {
+                bitmapImages = new Bitmap[2];
+                bitmapImages[0] = BitmapFactory.decodeResource(getResources(), R.drawable.default_imges);
+                bitmapImages[1] = BitmapFactory.decodeResource(getResources(), R.drawable.default_imges);
+                adapter = new CustomSlideAdapter(fragmentManager, bitmapImages, bitmapImages.length, 1);
+                dotsCount = bitmapImages.length;
+            }
+
             return;
         } else {
-            adapter = new CustomSlideAdapter(fragmentManager, mResources, mResources.length, 0);
-            dotsCount = mResources.length;
+            if (mResources.length != 0) {
+                adapter = new CustomSlideAdapter(fragmentManager, mResources, mResources.length, 0);
+                dotsCount = mResources.length;
+            } else {
+                adapter = new CustomSlideAdapter(fragmentManager, mResourcesDef, mResources.length, 0);
+                dotsCount = mResources.length;
+            }
+
         }
 
         viewPage.setAdapter(adapter);
